@@ -1,77 +1,74 @@
-#dependencies
-import os, csv
-#read data from file named "budget_data.csv" in folder named "Resources"
-csv_path = os.path.join("../Resources/budget_data.csv")
+#import dependencies
+import csv
+import os
 
-#To Count months, previous revenue, and total revenue
+# Files to load and output 
+file = os.path.join("Resources/budget_data.csv")
+
+# Track various financial parameters
 total_months = 0
-previous_revenue = 0
-total_revenue = 0
-#empty lists to be extracted from data file
-months_of_change = []
-revenue_change = []
-#dictionaries to store increases and decreases to later find greatest increase and greatest decrease
-increase = {}
-decrease = {}
-#greatest increase and greatest decrease
-greatest_increase = {}
-greatest_decrease = {}
+month_of_change = []
+net_change_list = []
+total_net = 0
 
-#open and read in csv file, data separated by comma delimiter
-with open(csv_path, newline='', encoding="utf-8") as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=",")
-    #loop through each row
-    for row in csv_reader:
-        #create a list of total months
-        total_months.append(row[0])
-        total_months = total_months + 1
-        #create list for total revenue
-        total_revenue = total_revenue.append(row[1])
-        total_revenue = total_revenue + float(row[1])
-        #revenue
-        revenue = float(row[1])
-        #previous_revenue
-        previous_revenue = revenue - revenue_change
-        #revenue change
-        revenue_change = revenue - previous_revenue
+# Read the csv and convert it into a list of dictionaries
+with open(file, newline = '') as financial_data:
+    reader = csv.reader(financial_data)
 
-        #add total months from row [0]
-        #sum of revenue from first month to last month
-        sum_revenue = sum(total_revenue('row[1]'))
-        #average of monthly changes
-        average_monthly_change = avg(float(revenue_change(row[1]))
-        #locate month with greatest increase
-        if row in revenue_changes is > 0:
-            increase.append(row[1])
-        else if row in revenue_changes is < 0:
-            decrease.append(row[1])
+    # Assign header data to a list
+    header = next(reader)
 
-        #put month of greatest increase into a variable
-        greatest_increase_month = greatest_increase(float(row[1]))
-        #locate month with greatest decrease and put into variable
-        greatest_decrease_month = greatest_decrease(float(row[1]))
-        #add for total revenue for whole year divided by the number of changes throughout the year period
-        total_revenue = sum(total_revenue)/len(total_revenue)
+    # Set variables to avoid calculating header row
+    first_row = next(reader)
+    total_months += 1
+    total_net += int(first_row[1])
+    previous_delta = int(first_row[1])
 
+
+    #total months method to calculate total months and net gain
+    for row in reader:
+      total_months += 1
+      total_net += int(row[1])
+
+    #calculate total profit in between months
+      delta = int(row[1]) - previous_delta
+      previous_delta = int(row[1])
+      #net_change_list = net_change_list + [delta]
+      net_change_list += [delta]
+      month_of_change += [row[0]]
+    print (net_change_list)
+    print (month_of_change)
+
+    max_val = max(net_change_list)
+    min_val = min(net_change_list)
+    max_position = net_change_list.index(max_val)
+    min_position = net_change_list.index(min_val)
+    total_net_avg = sum(net_change_list)/len(net_change_list)
+
+    print (max_val)
+    print (min_val)
+    print (max_position)
+    print (min_position)
+    print (month_of_change[24])
+    print (month_of_change[43])
+    print (total_net_avg)
+
+#print into terminal with f-strings    
 output = (
     f"\nFinancial Analysis\n"
-    f"-------------------------"
+    f"-------------------------\n"
     f"Total Months: {total_months}\n"
-    f"Total Revenue: {total_revenue}\n"
-    f"Average Revenue Change: ${revenue_avg}\n"
-    f"Greatest Increase in Revenue: {greatest_increase[0]} (${greatest_increase[1]})\n"
-    f"Greatest Decrease in Revenue: {greatest_decrease[0]} (${greatest_deccrease[1]})\n"
+    f"Total Revenue: {total_net}\n"
+    f"Average Revenue Change: ${total_net_avg}\n"
+    f"Greatest Increase in Revenue: {month_of_change[24]} (${max_val})\n"
+    f"Greatest Decrease in Revenue: {month_of_change[43]} (${min_val})\n"
 )    
 
 #print output to terminal
-
 print(output)
 
-
-
 #write cleaned data into CSV file
-
-output_path = os.path.join("..", "output", "budget_analysis.csv")
+output_path = os.path.join("output/budget_final.csv")
 with open(output_path, "w", newline='', encoding="utf-8") as csv_file:
     csv_writer = csv.writer(csv_file, delimiter=",")
     
