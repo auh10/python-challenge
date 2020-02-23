@@ -58,8 +58,8 @@ output = (
     f"\nFinancial Analysis\n"
     f"-------------------------\n"
     f"Total Months: {total_months}\n"
-    f"Total Revenue: {total_net}\n"
-    f"Average Revenue Change: ${total_net_avg}\n"
+    f"Total Revenue: ${total_net}\n"
+    f"Average Revenue Change: ${(round(total_net_avg, 2))}\n"
     f"Greatest Increase in Revenue: {month_of_change[24]} (${max_val})\n"
     f"Greatest Decrease in Revenue: {month_of_change[43]} (${min_val})\n"
 )    
